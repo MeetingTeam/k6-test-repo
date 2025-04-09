@@ -7,7 +7,7 @@ export let options = {
 };
 
 export default function () {
-          const url = 'http://frontend-service/about';
+          const url = 'http://frontend-service/login';
         
           // Make the GET request
           let res = http.get(url);

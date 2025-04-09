@@ -10,7 +10,7 @@ pipeline {
                     }
           }
           parameters {
-                    string(name: 'SCRIPT_PATH', defaultValue: 'frontend-test.js', description: 'K6 script to execute')
+                    string(name: 'SCRIPT_PATH', defaultValue: 'frontend_test.js', description: 'K6 script to execute')
           }
           stages {
                     stage("Clone k6-test-repo"){
@@ -29,11 +29,9 @@ pipeline {
                     stage('Run k6 Test') {
                               steps {
                                         container("k6"){
-                                                  script {
-                                                            echo "Running k6 script: ${k6RepoName}/${params.SCRIPT_PATH}"
-                                                            sh "cat ${k6RepoName}/${params.SCRIPT_PATH}"
-                                                            sh "k6 run ${k6RepoName}/${params.SCRIPT_PATH}"
-                                                  }
+                                                  echo "Running k6 script: ${k6RepoName}/${params.SCRIPT_PATH}"
+                                                  sh "cat ${k6RepoName}/${params.SCRIPT_PATH}"
+                                                  sh "k6 run ${k6RepoName}/${params.SCRIPT_PATH}"
                                         }
                               }
                     }
