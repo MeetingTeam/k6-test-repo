@@ -7,7 +7,7 @@ export let options = {
 };
 
 export default function () {
-          const url = 'http://frontend-service/login';
+          const url = 'http://frontend-service.default.svc.cluster.local/login';
         
           // Make the GET request
           let res = http.get(url);
