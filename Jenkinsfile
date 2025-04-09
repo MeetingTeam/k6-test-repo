@@ -1,3 +1,6 @@
+def k6RepoName = "k6-test-repo"
+def mainBranch ="main"
+
 pipeline {
           agent {
                     kubernetes {
@@ -5,16 +8,32 @@ pipeline {
                     }
           }
           parameters {
-                    string(name: 'K6_SCRIPT', defaultValue: 'load_test.js', description: 'K6 script to execute')
-                    choice(name: 'TEST_TYPE', choices: ['smoke', 'load', 'stress'], description: 'Type of test')
-                    booleanParam(name: 'DEBUG_MODE', defaultValue: false, description: 'Enable debug mode')
+                    string(name: 'SCRIPT_PATH', defaultValue: 'load_test.js', description: 'K6 script to execute')
+                    string(name: 'TEST_NAME', defaultValue: '', description: 'Name to distinguish tests')
           }
           stages {
+                    stage("Clone k6-test-repo"){
+                              steps{
+                                       withCredentials([
+                                                  usernamePassword(
+                                                            credentialsId: githubAccount, 
+                                                            passwordVariable: 'GIT_PASS', 
+                                                            usernameVariable: 'GIT_USER'
+                                                  )
+                                        ]) {
+                                                  sh "
+                                                            git clone https://\${GIT_USER}:\${GIT_PASS}@github.com/MeetingTeam/${k6RepoName}.git --branch ${mainBranch}
+                                                  "		
+				        }
+                              }
+                    }
                     stage('Run k6 Test') {
                               steps {
-                                        script {
-                                                  echo "Running test: ${params.TEST_TYPE}"
-                                                  sh "docker run --rm -v $(pwd):/scripts grafana/k6 run /scripts/${params.K6_SCRIPT}"
+                                        container("k6"){
+                                                  script {
+                                                            echo "Running test: ${params.TEST_NAME} from script ${params.SCRIPT_PATH}"
+                                                            sh "k6 run ${k6RepoName}/${params.SCRIPT_PATH}"
+                                                  }
                                         }
                               }
                     }
