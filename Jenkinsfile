@@ -3,6 +3,8 @@ def mainBranch ="main"
 
 def githubAccount = 'github'
 
+def k6ReportFile = "k6_report.txt"
+
 pipeline {
           agent {
                     kubernetes {
@@ -18,9 +20,14 @@ pipeline {
                                         container("k6"){
                                                   echo "Running k6 script: ${params.SCRIPT_PATH}"
                                                   sh "cat ${params.SCRIPT_PATH}"
-                                                  sh "k6 run ${params.SCRIPT_PATH}"
+                                                  sh "k6 run --out csv=${k6ReportFile} ${params.SCRIPT_PATH}"
                                         }
                               }
+                    }
+          }
+          post {
+                    always {
+                      archiveArtifacts artifacts: k6ReportFile, allowEmptyArchive: true, fingerprint: true
                     }
           }
 }
