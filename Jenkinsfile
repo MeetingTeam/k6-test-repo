@@ -3,7 +3,7 @@ def mainBranch ="main"
 
 def githubAccount = 'github'
 
-def k6ReportFile = "k6_report.txt"
+def k6ReportFile = "k6_report.csv"
 
 pipeline {
           agent {
