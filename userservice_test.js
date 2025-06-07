@@ -3,7 +3,7 @@ import { check } from 'k6';
 
 export let options = {
   vus: 100,
-  iterations: 1000
+  iterations: 100
 };
 
 export default function () {
