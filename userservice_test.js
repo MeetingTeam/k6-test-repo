@@ -7,7 +7,7 @@ export let options = {
 };
 
 export default function () {
-        const url = 'http://user-service.default.svc.cluster.local/user-service/user/private/by-ids';
+        const url = 'http://user-service.default.svc.cluster.local:8080/user-service/user/private/by-ids';
         const payload = JSON.stringify(["94f8f498-3071-700b-036b-8b64fc52a716","a4e804c8-60a1-7021-21ee-393fdfbe2492"])
         
         let res = http.post(url, payload);
